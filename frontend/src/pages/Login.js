@@ -16,26 +16,46 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/log-in', { email, password }, { withCredentials: true });
-      
-      console.log("Login Successful");
+      const response = await axios.post(
+        'http://localhost:5000/api/auth/log-in',
+        { email, password },
+        { withCredentials: true }
+      );
   
-      const { token, businessId } = response.data; 
+      console.log("Login Successful", response.data); // Log API response
   
-      Cookies.set('authToken', token, { expires: 7, path: '' });
+      const { token, role, businessId } = response.data;
   
-      if (businessId) {
-        navigate(`/dashboard/${businessId}`);
+      if (!role) {
+        console.error("Error: Role not found in response");
+        setError("Login response is missing role");
+        return;
+      }
+  
+      Cookies.set('authToken', token, { expires: 7, path: '/' });
+  
+      if (role === "Manager") {
+        if (businessId) {
+          console.log(`Redirecting to: /manager/dashboard/${businessId}`);
+          navigate(`/manager/dashboard/${businessId}`);
+        } else {
+          console.log("Manager has no business yet. Redirecting to manager dashboard.");
+          navigate(`/manager/dashboard`);
+        }
+      } else if (role === "User") {
+        console.log("Redirecting to user dashboard");
+        navigate('/user/dashboard');
       } else {
-        navigate('/dashboard');  
+        console.error("Unknown role:", role);
+        setError("Unknown role in login response");
       }
   
     } catch (err) {
+      console.error("Login error:", err.response?.data || err);
       setError(err.response?.data?.message || 'An error occurred');
     }
   };
   
-
   
 
   return (

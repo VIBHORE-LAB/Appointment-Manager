@@ -4,6 +4,7 @@ import axios from "axios";
 
 const PrivateRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [user, setUser] = useState(null); // Add state for user data
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -12,6 +13,7 @@ const PrivateRoute = ({ children }) => {
       .then((response) => {
         console.log("Auth Response:", response.data);
         setIsAuthenticated(response.data.authenticated);
+        setUser(response.data.user); // Set the user data
       })
       .catch((error) => {
         console.error("Auth Check Error:", error);
@@ -25,7 +27,8 @@ const PrivateRoute = ({ children }) => {
   if (loading) return <p>Loading authentication...</p>;
   if (!isAuthenticated) return <Navigate to="/log-in" />;
 
-  return children;
+  // Pass the user prop to the child component
+  return React.cloneElement(children, { user });
 };
 
 export default PrivateRoute;

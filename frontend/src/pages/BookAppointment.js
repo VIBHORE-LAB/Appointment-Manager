@@ -91,7 +91,7 @@ const BookAppointment = () => {
       );
       alert("Appointment Booked successfully");
       console.log("Appointment Booked successfully", response.data);
-      navigate("/dashboard"); // Redirect to the dashboard after booking
+      navigate("/user/dashboard"); // Redirect to the dashboard after booking
     } catch (err) {
       console.error("Error booking appointment:", err);
     }
@@ -107,11 +107,9 @@ const BookAppointment = () => {
       <Navbar />
 
       <div className="min-h-screen flex flex-col">
-        {/* Business Details and Appointment Section Combined */}
         <div className="max-w-6xl mx-auto mt-12">
           <div className="bg-white rounded-xl shadow-xl overflow-hidden mb-16">
             <div className="flex flex-col md:flex-row">
-              {/* Business Image */}
               <div className="w-full md:w-1/3">
                 <img
                   className="h-56 md:h-80 w-full object-cover"

@@ -1,5 +1,6 @@
 import React from 'react';
 import '../App.css';
+import navbarLogo from '../assets/navbar_logo.png';
 
 const Navbar = () => {
   return (
@@ -47,8 +48,8 @@ const Navbar = () => {
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex flex-shrink-0 items-center">
               <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                className="h-8 w-50"
+                src={navbarLogo} 
                 alt="Your Company"
               />
             </div>

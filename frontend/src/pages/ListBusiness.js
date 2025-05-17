@@ -16,7 +16,7 @@ const ListBusiness = () => {
                 const response = await axios.get("http://localhost:5000/api/get-businesses");
                 console.log("API Response:", response.data);
                 setBusiness(response.data);
-                setFilteredBusiness(response.data); // Initially show all businesses
+                setFilteredBusiness(response.data); 
             } catch (err) {
                 console.error("Error fetching Businesses: ", err);
             }
@@ -25,7 +25,6 @@ const ListBusiness = () => {
         fetchBusiness();
     }, []);
 
-    // Function to filter based on category and name
     const filterBusinesses = () => {
         const filtered = business.filter((b) => {
             // Ensure the category is case-insensitive

@@ -11,51 +11,55 @@ const SideBar = () => {
 
   return (
     <>
-      {/* Overlay (only when sidebar is open) */}
-      {!isCollapsed && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-10"
-          onClick={toggleSidebar}
-        ></div>
-      )}
-
-      {/* Sidebar */}
+    {/* Overlay (only when sidebar is open) */}
+    {!isCollapsed && (
       <div
-        className={`fixed left-0 top-0 h-screen bg-gray-800 text-white shadow-lg transition-all duration-300 z-20 flex flex-col ${
-          isCollapsed ? "w-16" : "w-64"
-        }`}
-      >
-        <div className="p-6 flex justify-between items-center">
-          {!isCollapsed && <h1 className="text-2xl font-bold">Menu</h1>}
-          <button onClick={toggleSidebar} className="text-white focus:outline-none">
-            {isCollapsed ? <FaBars size={24} /> : <FaTimes size={24} />}
-          </button>
-        </div>
-        <nav className="mt-6 flex flex-col gap-2">
-          <Link
-            to="/edit-profile"
-            className="flex items-center px-6 py-3 text-gray-200 hover:bg-gray-700 transition duration-300"
-          >
-            <FaUser size={30} className="mr-3" />
-            {!isCollapsed && "Edit Profile"}
-          </Link>
-          <Link
-            to="/settings"
-            className="flex items-center px-6 py-3 text-gray-200 hover:bg-gray-700 transition duration-300"
-          >
-            <FaCog size={30} className="mr-3" />
-            {!isCollapsed && "Settings"}
-          </Link>
-          <Link
-            to="/logout"
-            className="flex items-center px-6 py-3 text-gray-200 hover:bg-gray-700 transition duration-300"
-          >
-            <FaSignOutAlt size={30} className="mr-3" />
-            {!isCollapsed && "Log Out"}
-          </Link>
-        </nav>
+        className="fixed inset-0 bg-black bg-opacity-50 z-10"
+        onClick={toggleSidebar}
+      ></div>
+    )}
+  
+    {/* Sidebar */}
+    <div
+      className={`fixed left-0 top-0 h-screen bg-white text-black shadow-lg transition-all duration-300 z-[50] flex flex-col ${
+        isCollapsed ? "w-16" : "w-64"
+      }`}
+    >
+      {/* Sidebar Header */}
+      <div className="p-4 flex justify-between items-center border-b border-gray-300 relative z-[60]">
+        {!isCollapsed && <h1 className="text-xl font-bold">Menu</h1>}
+        <button onClick={toggleSidebar} className="text-black focus:outline-none z-[70]">
+          {isCollapsed ? <FaBars size={24} /> : <FaTimes size={24} />}
+        </button>
       </div>
-    </>
+  
+      {/* Sidebar Links */}
+      <nav className="mt-4 flex flex-col gap-2">
+        <Link
+          to="/user/dashboard"
+          className="flex items-center px-4 py-3 text-black hover:bg-gray-200 transition duration-300 text-lg"
+        >
+          <FaUser size={24} className="min-w-[30px] mr-3" />
+          <span className={`${isCollapsed ? "hidden" : "block"}`}>Dashboard</span>
+        </Link>
+        <Link
+          to="/settings"
+          className="flex items-center px-4 py-3 text-black hover:bg-gray-200 transition duration-300 text-lg"
+        >
+          <FaCog size={24} className="min-w-[30px] mr-3" />
+          <span className={`${isCollapsed ? "hidden" : "block"}`}>Settings</span>
+        </Link>
+        <Link
+          to="/log-out"
+          className="flex items-center px-4 py-3 text-black hover:bg-gray-200 transition duration-300 text-lg"
+        >
+          <FaSignOutAlt size={24} className="min-w-[30px] mr-3" />
+          <span className={`${isCollapsed ? "hidden" : "block"}`}>Log Out</span>
+        </Link>
+      </nav>
+    </div>
+  </>
+  
   );
 };
 

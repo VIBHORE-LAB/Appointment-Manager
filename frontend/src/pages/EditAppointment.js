@@ -103,32 +103,39 @@ const EditAppointment = () => {
     const handleDateSelect = (date) => {
         setSelectedDate(date); // Set the selected date
     };
-
     const handleSlotSelect = (slot) => {
-        setSelectedSlot(slot); // Set the selected slot
+        console.log("Selected slot:", slot); // Debugging log
+        setSelectedSlot(slot);
     };
+    
 
     const handleRescheduleAppointment = async () => {
         if (!selectedDate || !selectedSlot) {
             alert("Please select a date and time");
             return;
         }
-
+    
         try {
             const response = await axios.put(
                 `http://localhost:5000/api/appointments/reschedule/${appointmentId}`,
-                { newDate: selectedDate, newTime: selectedSlot },
+                { date: selectedDate, time: selectedSlot }, // Fix: Ensure correct field names
                 { withCredentials: true }
             );
+    
             alert("Appointment rescheduled successfully");
             console.log("Appointment rescheduled successfully", response.data);
-            navigate("/dashboard"); // Redirect to the dashboard after rescheduling
+            navigate("/user/dashboard"); // Redirect user
         } catch (err) {
             console.error("Error rescheduling appointment:", err);
             alert(err.response?.data?.message || "Failed to reschedule appointment.");
         }
     };
-
+    
+    // Ensure business and appointment are loaded before rendering anything
+    if (!business || !appointment) {
+        return <div>Loading...</div>;
+    }
+    
     // Make sure business and appointment are loaded before rendering anything else
     if (!business || !appointment) {
         return <div>Loading...</div>; // Fallback loading screen while data loads
