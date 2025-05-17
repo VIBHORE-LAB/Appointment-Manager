@@ -90,6 +90,7 @@ router.post('/log-in', async (req, res) => {
     res.json({ 
       message: 'Login successful', 
       token, 
+      role: user.role,
       user,
       businessId: user.role === 'Manager' && business ? business._id : null  // Ensure it's always included
     });
@@ -219,10 +220,18 @@ router.get('/check-auth', (req, res) => {
     if (err) {
       return res.json({ authenticated: false, user: null });
     }
-    res.json({ authenticated: true, user: decoded });
+
+    const userResponse = {
+      id: decoded.id,
+      name: decoded.name,
+      email: decoded.email,
+      role: decoded.role,
+      ...(decoded.role === "Manager" && { businessId: decoded.businessId }),
+    };
+
+    res.json({ authenticated: true, user: userResponse });
   });
 });
-
 
 
 

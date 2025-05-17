@@ -56,30 +56,27 @@ const cancelAppointment = async (req, res) => {
 const rescheduleAppointment = async (req, res, next) => {
     try {
         const { appointmentId } = req.params;
-        const { time: newTime, date: newDate } = req.body; // Destructure time and date from req.body
+        const { time: newTime, date: newDate } = req.body; 
 
-        // Log the request body for debugging
         console.log("Request Body:", req.body);
 
-        // Find the appointment by ID
         const appointment = await Appointment.findById(appointmentId);
         if (!appointment) {
             return res.status(404).json({ message: "Appointment not found" });
         }
 
-        // Set businessId and date for the getAvailableSlotsMiddleware
+        // Assign businessId and date for the middleware
         req.params.businessId = appointment.businessId;
         req.params.date = newDate;
 
-        // Fetch available slots for the new date
+        // Fetch available slots
         await getAvailableSlotsMiddleware(req, res, async () => {
             const availableSlots = req.availableSlots;
-            console.log("Available Slots:", availableSlots); // Log available slots for debugging
-            console.log("New Time:", newTime); // Log the new time being requested
+            console.log("Available Slots:", availableSlots);
+            console.log("New Time:", newTime);
 
-            // Check if the new time is available
+            // Ensure the selected time slot is available
             const isNewSlotAvailable = availableSlots.some((slot) => {
-                console.log(`Comparing ${slot.time} (${slot.status}) with ${newTime}`); // Debugging log
                 return slot.time === newTime && slot.status === "available";
             });
 
@@ -87,14 +84,13 @@ const rescheduleAppointment = async (req, res, next) => {
                 return res.status(400).json({ message: "New slot is not available" });
             }
 
-            // Update the appointment with the new time and date
+            // Update appointment
             const updatedAppointment = await Appointment.findByIdAndUpdate(
                 appointmentId,
                 { time: newTime, date: newDate },
                 { new: true }
             );
 
-            // Return success response
             res.status(200).json({ message: "Appointment rescheduled", updatedAppointment });
         });
     } catch (error) {
@@ -102,6 +98,7 @@ const rescheduleAppointment = async (req, res, next) => {
         res.status(500).json({ message: "Error rescheduling appointment", error: error.message });
     }
 };
+
 
 const sendAppointmentReminders = async () => {
     try {
