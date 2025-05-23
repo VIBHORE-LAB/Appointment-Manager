@@ -64,6 +64,20 @@ app.use((err, req, res, next) => {
 
 // ✅ Start the server
 const PORT = process.env.PORT || 5000;
+const path = require("path");
+const fs = require("fs");
+
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+app.get("*", (req, res) => {
+  const indexPath = path.join(__dirname, "../frontend/build/index.html");
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send("Frontend build not found");
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
